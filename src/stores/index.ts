@@ -1,76 +1,54 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable unicorn/prefer-spread */
-import type { AnyAction } from '@reduxjs/toolkit';
+import type { Reducer } from '@reduxjs/toolkit';
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import { createWrapper, HYDRATE } from 'next-redux-wrapper';
+import { createWrapper } from 'next-redux-wrapper';
+import { persistReducer, persistStore } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 
-import { logger } from '../utils/logger';
-import {
-  getSessionStorageItem,
-  removeSessionStorageItem,
-  setSessionStorageItem,
-} from '../utils/session-storage';
-import type { TempInfo } from './features/temps';
-import temps from './features/temps';
+import type { ThemeInfo } from './features/Themes';
+import themes from './features/Themes';
 
-const reducer = (state: any, action: AnyAction) => {
-  if (action.type === HYDRATE) {
-    return {
-      ...state,
-      ...action.payload,
-    };
-  }
-
-  return combineReducers({
-    temps,
-  })(state, action);
+const persistConfig = {
+  key: 'root',
+  storage,
+  whitelist: ['themes'],
 };
 
-const sessionStorageMiddleware =
-  ({ getState }: any) =>
-  (next: any) =>
-  (action: any) => {
-    const result = next(action);
-
-    if (action.type === 'temps/setTemp') {
-      setSessionStorageItem(
-        'tempInfo',
-        JSON.stringify({ temps: getState().users }),
-      );
-    }
-
-    if (action.type === 'temps/resetTemp') {
-      removeSessionStorageItem('tempInfo');
-    }
-
-    return result;
-  };
-
-const reHydrateStore = () => {
-  if (getSessionStorageItem('tempInfo') !== null) {
-    try {
-      return JSON.parse(getSessionStorageItem('tempInfo')!); // re-hydrate the store
-    } catch (error) {
-      logger.log(error);
-    }
-  }
-};
-
-const store = configureStore({
-  reducer,
-  preloadedState: reHydrateStore(),
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(sessionStorageMiddleware),
+const rootReducer = combineReducers({
+  themes,
 });
 
-export const wrapper = createWrapper(() => store, {
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+const makeConfigureStore = (reducer: Reducer) =>
+  configureStore({
+    reducer,
+  });
+
+const makeStore = () => {
+  const isServer = typeof window === 'undefined';
+
+  if (isServer) {
+    return makeConfigureStore(rootReducer);
+  }
+
+  const store = makeConfigureStore(persistedReducer);
+  const persistor = persistStore(store);
+
+  return { persistor, ...store };
+};
+
+export const wrapper = createWrapper(makeStore, {
   debug: process.env.NODE_ENV === 'development',
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = {
-  temps: TempInfo;
+  themes: ThemeInfo;
 };
+
+// const store = makeStore();
 // Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
-export type AppDispatch = typeof store.dispatch;
+// export type AppDispatch = typeof store.dispatch;
