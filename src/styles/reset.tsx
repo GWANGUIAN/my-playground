@@ -1,7 +1,9 @@
 /* eslint-disable prettier/prettier */
 import { css } from '@emotion/react';
 
-export const globalStyles = css`
+import type { Theme } from './theme';
+
+export const globalStyles = (theme: Theme) =>css`
   /* http://meyerweb.com/eric/tools/css/reset/
     v2.0-modified | 20110126
     License: none (public domain)
@@ -27,6 +29,11 @@ export const globalStyles = css`
     font: inherit;
     vertical-align: baseline;
     /* scroll-behavior: smooth; */
+  }
+
+  body {
+    background-color: ${theme.background};
+    color: ${theme.text};
   }
 
   /* no border, no margin, no padding for input */
