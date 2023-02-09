@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-export const useMatchMedia = (maxWidth = 1023) => {
+const useMatchMedia = (maxWidth = 1023) => {
   const [isMatchMedia, setIsMatchMedia] = useState(false);
 
   useEffect(() => {
@@ -20,3 +20,5 @@ export const useMatchMedia = (maxWidth = 1023) => {
 
   return isMatchMedia;
 };
+
+export default useMatchMedia;

@@ -1,10 +1,22 @@
-export const navigation = [
+export interface SubMenu {
+  name: string;
+  path: string;
+}
+
+export interface MainMenu {
+  name: string;
+  path?: string;
+  subMenus?: SubMenu[];
+}
+
+export const MenuList: MainMenu[] = [
   {
-    name: '홈',
-    path: '/',
-  },
-  {
-    name: 'Keyboard API',
-    path: '/keyboard',
+    name: 'Web APIs',
+    subMenus: [
+      {
+        name: 'Keyboard API',
+        path: '/web/keyboard',
+      },
+    ],
   },
 ];

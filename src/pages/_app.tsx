@@ -1,4 +1,5 @@
 /* eslint-disable import/no-unresolved */
+import '../styles/global.css';
 import '@fortawesome/fontawesome-svg-core/styles.css';
 
 import { Global } from '@emotion/react';
