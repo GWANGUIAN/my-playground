@@ -72,3 +72,7 @@ export const responsiveGap = (
 ) => css`
   gap: min(${gap}px, ${(gap / containerWidth) * 100}vw);
 `;
+
+export const fontBlackHanSans = css`
+  font-family: 'Black Han Sans';
+`;
