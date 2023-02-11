@@ -9,7 +9,7 @@ export interface MainMenu {
   subMenus?: SubMenu[];
 }
 
-export const MenuList: MainMenu[] = [
+export const menuList: MainMenu[] = [
   {
     name: 'Web APIs',
     subMenus: [

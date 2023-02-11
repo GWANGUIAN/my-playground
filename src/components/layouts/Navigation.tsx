@@ -1,13 +1,16 @@
 import { css } from '@emotion/react';
+import { faBars, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import type { MainMenu, SubMenu } from '../../contstants/navigation';
-import { MenuList } from '../../contstants/navigation';
+import { menuList } from '../../contstants/navigation';
 import type { RootState } from '../../stores';
 import { fontBlackHanSans } from '../../styles/common';
 import type { Theme } from '../../styles/theme';
+import MobileMenu from '../items/MobileMenu';
 import ThemeToggle from '../items/ThemeToggle';
 
 const navHeight = 56;
@@ -30,6 +33,9 @@ const homeButton = (color: string) => css`
   text-align: left;
   color: ${color};
   ${fontBlackHanSans}
+  @media(max-width: 1023px) {
+    left: auto;
+  }
 `;
 
 const themeBox = css`
@@ -46,6 +52,9 @@ const menuBox = css`
   width: calc(100% - 400px);
   display: flex;
   align-items: center;
+  @media (max-width: 1023px) {
+    display: none;
+  }
 `;
 
 const mainMenuStyle = (isActive: boolean) => css`
@@ -83,6 +92,15 @@ const subMenuStyle = (isActive: boolean) => css`
   }
 `;
 
+const mobileToggleButton = (theme: Theme) => css`
+  position: absolute;
+  left: 15px;
+  color: ${theme.buttonText};
+  @media (min-width: 1024px) {
+    display: none;
+  }
+`;
+
 const SubMenuBox = ({
   subMenus,
   isActive,
@@ -104,16 +122,15 @@ const SubMenuBox = ({
 };
 
 const MainMenuItem = (props: MainMenu) => {
+  const { name, subMenus, path } = props;
   const router = useRouter();
   const [isActive, setIsActive] = useState(false);
-  const { name, subMenus, path } = props;
 
   return (
     <li
       css={mainMenuStyle(
-        Boolean(
-          subMenus?.some((subMenu) => subMenu.path === router.pathname),
-        ) || path === router.pathname,
+        subMenus?.some((subMenu) => subMenu.path === router.pathname) ||
+          path === router.pathname,
       )}
       onClick={() => {
         void router.push(subMenus?.[0].path || path!);
@@ -133,17 +150,35 @@ const MainMenuItem = (props: MainMenu) => {
 
 const Navigation = () => {
   const theme = useSelector((state: RootState) => state.themes.theme);
+  const router = useRouter();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
     <>
       <header css={container(theme)}>
-        <button css={homeButton(theme.buttonText)}>
+        <button
+          css={mobileToggleButton(theme)}
+          onClick={() => {
+            setIsMobileMenuOpen(!isMobileMenuOpen);
+          }}
+        >
+          <FontAwesomeIcon
+            icon={isMobileMenuOpen ? faXmark : faBars}
+            size="lg"
+          />
+        </button>
+        <button
+          css={homeButton(theme.buttonText)}
+          onClick={() => {
+            void router.push('/');
+          }}
+        >
           MY
           <br />
           PLAYGROUND
         </button>
         <ul css={menuBox}>
-          {MenuList.map((mainMenu, index) => (
+          {menuList.map((mainMenu, index) => (
             <MainMenuItem key={index} {...mainMenu} />
           ))}
         </ul>
@@ -152,6 +187,7 @@ const Navigation = () => {
         </div>
       </header>
       <div css={navArea} />
+      <MobileMenu isOpen={isMobileMenuOpen} />
     </>
   );
 };

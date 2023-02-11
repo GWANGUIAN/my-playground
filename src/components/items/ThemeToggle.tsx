@@ -41,13 +41,30 @@ const toggle = (isDarkMode: boolean) => css`
   }
 `;
 
+const pcIcon = css`
+  @media (max-width: 1023px) {
+    display: none;
+  }
+`;
+
+const mobileIcon = (isDarkMode: boolean) => css`
+  position: absolute;
+  top: 50%;
+  left: ${isDarkMode ? '7px' : 'auto'};
+  right: ${isDarkMode ? 'auto' : '7px'};
+  transform: translateY(-50%);
+  @media (min-width: 1024px) {
+    display: none;
+  }
+`;
+
 const ThemeToggle = () => {
   const { isDarkMode } = useSelector((state: RootState) => state.themes);
   const dispatch = useDispatch();
 
   return (
     <div css={container}>
-      <FontAwesomeIcon icon={isDarkMode ? faMoon : faSun} />
+      <FontAwesomeIcon icon={isDarkMode ? faMoon : faSun} css={pcIcon} />
       <label css={toggleBox}>
         <input
           type="checkbox"
@@ -58,6 +75,10 @@ const ThemeToggle = () => {
           css={input}
         />
         <div css={toggle(isDarkMode)}>
+          <FontAwesomeIcon
+            icon={isDarkMode ? faMoon : faSun}
+            css={mobileIcon(isDarkMode)}
+          />
           <div />
         </div>
       </label>
