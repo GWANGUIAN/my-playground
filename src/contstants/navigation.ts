@@ -19,4 +19,13 @@ export const menuList: MainMenu[] = [
       },
     ],
   },
+  {
+    name: 'Frameworks',
+    subMenus: [
+      {
+        name: 'Three js',
+        path: '/frameworks/threejs',
+      },
+    ],
+  },
 ];

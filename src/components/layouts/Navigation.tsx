@@ -52,6 +52,7 @@ const menuBox = css`
   width: calc(100% - 400px);
   display: flex;
   align-items: center;
+  gap: 50px;
   @media (max-width: 1023px) {
     display: none;
   }
