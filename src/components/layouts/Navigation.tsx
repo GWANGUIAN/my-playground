@@ -25,6 +25,7 @@ const container = (theme: Theme) => css`
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 9999;
 `;
 
 const homeButton = (color: string) => css`
@@ -52,6 +53,7 @@ const menuBox = css`
   width: calc(100% - 400px);
   display: flex;
   align-items: center;
+  gap: 50px;
   @media (max-width: 1023px) {
     display: none;
   }
@@ -81,7 +83,7 @@ const subMenuBox = (isAcitive: boolean) => css`
   align-items: center;
   padding: 20px 0px;
   width: 130px;
-  background-color: #ababab20;
+  background-color: #abababb3;
 `;
 
 const subMenuStyle = (isActive: boolean) => css`

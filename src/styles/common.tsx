@@ -76,3 +76,31 @@ export const responsiveGap = (
 export const fontBlackHanSans = css`
   font-family: 'Black Han Sans';
 `;
+
+export const responsiveTop = (
+  top: number,
+  containerWidth = maxContainerWidth,
+) => css`
+  top: min(${top}px, ${(top / containerWidth) * 100}vw);
+`;
+
+export const responsiveLeft = (
+  left: number,
+  containerWidth = maxContainerWidth,
+) => css`
+  left: min(${left}px, ${(left / containerWidth) * 100}vw);
+`;
+
+export const responsiveRight = (
+  right: number,
+  containerWidth = maxContainerWidth,
+) => css`
+  right: min(${right}px, ${(right / containerWidth) * 100}vw);
+`;
+
+export const responsiveBottom = (
+  bottom: number,
+  containerWidth = maxContainerWidth,
+) => css`
+  bottom: min(${bottom}px, ${(bottom / containerWidth) * 100}vw);
+`;
