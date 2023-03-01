@@ -84,6 +84,7 @@ const subMenuBox = (isAcitive: boolean) => css`
   padding: 20px 0px;
   width: 130px;
   background-color: #abababb3;
+  gap: 15px;
 `;
 
 const subMenuStyle = (isActive: boolean) => css`
@@ -115,7 +116,14 @@ const SubMenuBox = ({
   return (
     <ul css={subMenuBox(isActive)}>
       {subMenus.map(({ name, path }) => (
-        <li key={path} css={subMenuStyle(router.pathname === path)}>
+        <li
+          key={path}
+          css={subMenuStyle(router.pathname === path)}
+          onClick={(e) => {
+            void router.push(path);
+            e.stopPropagation();
+          }}
+        >
           {name}
         </li>
       ))}

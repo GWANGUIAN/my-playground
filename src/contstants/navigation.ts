@@ -26,6 +26,10 @@ export const menuList: MainMenu[] = [
         name: 'Three js',
         path: '/frameworks/threejs',
       },
+      {
+        name: 'Anime js',
+        path: '/frameworks/animejs',
+      },
     ],
   },
 ];
