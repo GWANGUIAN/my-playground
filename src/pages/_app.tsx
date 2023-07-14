@@ -10,10 +10,11 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useSelector } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 
 import { ErrorFallback } from '../components/items/ErrorFallback';
 import type { RootState } from '../stores';
-import { wrapper } from '../stores';
+import { persistor, wrapper } from '../stores';
 import { globalStyles } from '../styles/reset';
 
 config.autoAddCss = false;
@@ -25,17 +26,19 @@ const App = ({ Component, pageProps }: AppProps) => {
 
   return (
     <>
-      <QueryClientProvider client={queryClient}>
-        <Global styles={globalStyles(themeInfo.theme)} />
-        <ErrorBoundary
-          FallbackComponent={ErrorFallback}
-          onReset={() => {
-            void router.back();
-          }}
-        >
-          <Component {...pageProps} />
-        </ErrorBoundary>
-      </QueryClientProvider>
+      <PersistGate persistor={persistor}>
+        <QueryClientProvider client={queryClient}>
+          <Global styles={globalStyles(themeInfo.theme)} />
+          <ErrorBoundary
+            FallbackComponent={ErrorFallback}
+            onReset={() => {
+              void router.back();
+            }}
+          >
+            <Component {...pageProps} />
+          </ErrorBoundary>
+        </QueryClientProvider>
+      </PersistGate>
     </>
   );
 };

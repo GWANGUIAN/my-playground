@@ -27,15 +27,15 @@ const makeConfigureStore = (reducer: Reducer) =>
     reducer,
   });
 
+const store = makeConfigureStore(persistedReducer);
+export const persistor = persistStore(store);
+
 const makeStore = () => {
   const isServer = typeof window === 'undefined';
 
   if (isServer) {
     return makeConfigureStore(rootReducer);
   }
-
-  const store = makeConfigureStore(persistedReducer);
-  const persistor = persistStore(store);
 
   return { persistor, ...store };
 };
